@@ -5,18 +5,40 @@ from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from threading import Thread
 import time
 
+# def run_slave():
+#     print("Modbus server started...")
+#     # Tcp:
+#     StartTcpServer(context, address=("localhost", 12345))
+
+# def update_slave_values():
+#     i = 0
+#     while(Tru):
+#         store.setValues(3, i % 9, [i])
+#         print(store.getValues(3,0,9))
+#         time.sleep(2)
+#         i=(i+1)
+
 def run_slave():
-    print("Modbus server started...")
+    print("Modbus server/slave started...")
     # Tcp:
     StartTcpServer(context, address=("localhost", 12345))
 
+
 def update_slave_values():
-    i = 0
-    while(i<20):
-        store.setValues(3, i, [i])
-        print(store.getValues(3,0,9))
-        time.sleep(2)
-        i=(i+1)%9
+    #Updating holding registers
+    while(True):
+        f = open("vals.txt", "r")
+        vals = f.read().split(" ")
+        f.close()
+        vals = [int(i) for i in vals]
+        if store.getValues(3, 0, len(vals)) != vals:
+            print("New temperature values : ",vals)
+            store.setValues(3, 0, vals)
+            print("Holding registers have been updated to => ", store.getValues(3, 0, 9))
+        else:
+            print("Temperature didn't change : ", vals)
+        time.sleep(4)
+
 if __name__ == '__main__':
     
 

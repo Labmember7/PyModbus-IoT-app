@@ -29,40 +29,53 @@ def update_temperature():
         temp3 = post_data.get("temp3")
         print(temp1, temp2, temp3)
         print("Writing new temperature values ...")
-        update_slave_values(new_vals=[temp1,temp2,temp3])
+        f = open("vals.txt", "w")
+        f.write(str(temp1)+" "+str(temp2)+" " +str(temp3))
+        f.close()
     return jsonify(response_object)
 
 
-def run_slave():
-    print("Modbus server/slave started...")
-    # Tcp:
-    StartTcpServer(context, address=("localhost", 12345))
+# def run_slave():
+#     print("Modbus server/slave started...")
+#     # Tcp:
+#     StartTcpServer(context, address=("localhost", 12345))
 
 
-def update_slave_values(new_vals=[0,0,0]):
-    #Updating holding registers
-    store.setValues(3, 0, new_vals)
-    print("New holding registers are : ", store.getValues(3, 0, 9))
+# def update_slave_values():
+#     #Updating holding registers
+#     while(True):
+#         print([temp1,temp2,temp3])
+#         store.setValues(3, 0, [temp1,temp2,temp3])
+#         print("New holding registers are : ", store.getValues(3, 0, 9))
+#         time.sleep(4)
+        
         
 if __name__ == '__main__':
     #Creating the pymodbus server
-    store = ModbusSlaveContext(
-        di=ModbusSequentialDataBlock(0, [5]*10),
-        co=ModbusSequentialDataBlock(0, [6]*10),
-        hr=ModbusSequentialDataBlock(0, [7]*10),
-        ir=ModbusSequentialDataBlock(0, [8]*10))
+    # store = ModbusSlaveContext(
+    #     di=ModbusSequentialDataBlock(0, [5]*10),
+    #     co=ModbusSequentialDataBlock(0, [6]*10),
+    #     hr=ModbusSequentialDataBlock(0, [7]*10),
+    #     ir=ModbusSequentialDataBlock(0, [8]*10))
 
-    '''
-    di : Discrete Input
-    co : Coils
-    hr : Holding Registers
-    ir : Internal registers
-    '''
+    # '''
+    # di : Discrete Input
+    # co : Coils
+    # hr : Holding Registers
+    # ir : Internal registers
+    # '''
 
-    context = ModbusServerContext(slaves=store, single=True)
-    t1 = Thread(target=run_slave)
-    t1.start()
-    t1.join(2)
-    time.sleep(4)
+    # context = ModbusServerContext(slaves=store, single=True)
+    # t1 = Thread(target=run_slave)
+    # t1.start()
+    # time.sleep(2)
+
+    # t2 = Thread(target=update_slave_values)
+    # t2.start()
+
+    # t1.join(1)
+    # t2.join(1)
+
+    # time.sleep(2)
     #Running the flask app
     app.run()

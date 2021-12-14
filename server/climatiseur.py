@@ -24,11 +24,6 @@ class MainWindow():
         # set first image on canvas
         self.image_on_canvas = self.canvas.create_image(
             0, 0, anchor='nw', image=self.my_images[self.my_image_number])
-
-        # button to change image
-        self.button = Button(main, text="ON/OFF", command=self.onButton)
-        self.button.grid(row=1, column=0)
-
     #----------------
 
     def onButton(self):
@@ -52,10 +47,10 @@ class MainWindow():
 
 def run_sync_client():
     while (True):
+        time.sleep(4)
         print("Reading temperature registers ...")
         rr2 = client.read_holding_registers(0, 9, unit=UNIT)
-        print(rr2.registers)
-        time.sleep(3)
+        print(rr2.registers[0:3])
         try:
             if max(rr2.registers)>30:
                 print("Temperature is high -> AC is ON")
@@ -71,11 +66,11 @@ def run_sync_client():
 if __name__ == '__main__':
     
     print("Running client/Master")
-    client = ModbusClient('192.168.10.2', port=50000)
+    client = ModbusClient('localhost', port=12345)
     client.connect()
     Thread(target=run_sync_client).start()
 
-    print("Launching UI")
+    #Launching UI
     root = Tk()
     m = MainWindow(root)
     Thread(target=root.mainloop()).start()
