@@ -105,10 +105,10 @@ export default {
       temp1: 20,
       temp2: 15,
       temp3: 10,
-      min: -10,
+      min: 0,
       max: 60,
       rules: [
-        v => v <= 60 && v > -10,
+        v => v <= 60 && v > 0,
       ],
       text:"",
       snackbar:false,

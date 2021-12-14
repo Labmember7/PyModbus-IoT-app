@@ -47,7 +47,7 @@ class MainWindow():
 
 def run_sync_client():
     while (True):
-        time.sleep(4)
+        time.sleep(5)
         print("Reading temperature registers ...")
         rr2 = client.read_holding_registers(0, 9, unit=UNIT)
         print(rr2.registers[0:3])

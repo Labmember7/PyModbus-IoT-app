@@ -5,19 +5,6 @@ from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from threading import Thread
 import time
 
-# def run_slave():
-#     print("Modbus server started...")
-#     # Tcp:
-#     StartTcpServer(context, address=("localhost", 12345))
-
-# def update_slave_values():
-#     i = 0
-#     while(Tru):
-#         store.setValues(3, i % 9, [i])
-#         print(store.getValues(3,0,9))
-#         time.sleep(2)
-#         i=(i+1)
-
 def run_slave():
     print("Modbus server/slave started...")
     # Tcp:
@@ -36,8 +23,8 @@ def update_slave_values():
             store.setValues(3, 0, vals)
             print("Holding registers have been updated to => ", store.getValues(3, 0, 9))
         else:
-            print("Temperature didn't change : ", vals)
-        time.sleep(4)
+            print(time.ctime()," | Temperature didn't change : ", vals)
+        time.sleep(5)
 
 if __name__ == '__main__':
     
@@ -47,6 +34,13 @@ if __name__ == '__main__':
     co=ModbusSequentialDataBlock(0, [6]*10),
     hr=ModbusSequentialDataBlock(0, [7]*10),
     ir=ModbusSequentialDataBlock(0, [8]*10))
+    
+    '''
+    di : Discrete Input
+    co : Coils
+    hr : Holding Registers
+    ir : Internal registers
+    '''
 
     context = ModbusServerContext(slaves=store, single=True)
     t1 = Thread(target=run_slave)
