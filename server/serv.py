@@ -4,12 +4,13 @@ from pymodbus.datastore import ModbusSequentialDataBlock
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from threading import Thread
 import time
-def run_server():
+
+def run_slave():
     print("Modbus server started...")
     # Tcp:
     StartTcpServer(context, address=("localhost", 12345))
 
-def fun():
+def update_slave_values():
     i = 0
     while(i<20):
         store.setValues(3, i, [i])
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     ir=ModbusSequentialDataBlock(0, [8]*10))
 
     context = ModbusServerContext(slaves=store, single=True)
-    t1 = Thread(target=run_server)
+    t1 = Thread(target=run_slave)
     t1.start()
 
     time.sleep(2)

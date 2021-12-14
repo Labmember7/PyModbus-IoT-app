@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-
+from pymodbus.version import version
+from pymodbus.server.sync import StartTcpServer
+from pymodbus.datastore import ModbusSequentialDataBlock
+from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
+from threading import Thread
+import time
 # configuration
 DEBUG = True
 temp1 = 0
@@ -25,11 +29,31 @@ def update_temperature():
         temp3 = post_data.get("temp3")
         print(temp1, temp2, temp3)
         print("Writing new temperature values ...")
-        wr = client.write_registers(1, [temp1, temp2, temp3])
+        update_slave_values(new_vals=[temp1,temp2,temp3])
     return jsonify(response_object)
 
 
+def run_slave():
+    print("Modbus server started...")
+    # Tcp:
+    StartTcpServer(context, address=("localhost", 12345))
+
+
+def update_slave_values(new_vals=[0,0,0]):
+    store.setValues(3, 0, new_vals)
+    print(store.getValues(3, 0, len(new_vals)))
+        
 if __name__ == '__main__':
-    client = ModbusClient('localhost', port=12345)
-    client.connect()
+    #Creating the pymodbus server
+    store = ModbusSlaveContext(
+        di=ModbusSequentialDataBlock(0, [5]*10),
+        co=ModbusSequentialDataBlock(0, [6]*10),
+        hr=ModbusSequentialDataBlock(0, [7]*10),
+        ir=ModbusSequentialDataBlock(0, [8]*10))
+
+    context = ModbusServerContext(slaves=store, single=True)
+    t1 = Thread(target=run_slave)
+    t1.start()
+    t1.join(2)
+    #Running the flask app
     app.run()
