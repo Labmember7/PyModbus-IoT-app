@@ -14,7 +14,7 @@ def update_slave_values():
     i = 0
     while(i<20):
         store.setValues(3, i, [i])
-        print(store.getValues(3,0,10))
+        print(store.getValues(3,0,9))
         time.sleep(2)
         i=(i+1)%9
 if __name__ == '__main__':
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     time.sleep(2)
     
-    t2 = Thread(target=fun)
+    t2 = Thread(target=update_slave_values)
     t2.start()
     
     t1.join(1)

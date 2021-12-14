@@ -51,42 +51,27 @@ class MainWindow():
     #----------------
 
 def run_sync_client():
-    i = 0
-    while (i < 50):
+    while (True):
         print("Reading temperature registers ...")
-        #wr = client.write_registers(1, [7, 21, 77])
-        rr2 = client.read_holding_registers(0, 7, unit=UNIT)
+        rr2 = client.read_holding_registers(0, 9, unit=UNIT)
         print(rr2.registers)
-
         time.sleep(3)
         try:
             if max(rr2.registers)>30:
+                print("Temperature is high -> AC is ON")
                 m.onButton()
             else:
-                print("Temperature is ok !")
+                print("Temperature is ok  -> AC is OFF")
                 m.offButton()
         except:
+            client.close()
             quit()
-        i += 1
-    client.close()
-    # arguments = {
-    # 'read_address':    1,
-    # 'read_count':      3,
-    # 'write_address':   1,
-    # 'write_registers': [20,21,23],
-    # }
-    # print("Read write registeres simulataneously")
-    # rq = client.readwrite_registers(unit=UNIT, **arguments)
-    # rr = client.read_holding_registers(1, 3, unit=UNIT)
-    # print(rq.registers)
-    # print(rr.registers)
-    #client.close()
 
 #----------------------------------------------------------------------
 if __name__ == '__main__':
     
-    print("Running client")
-    client = ModbusClient('localhost', port=12345)
+    print("Running client/Master")
+    client = ModbusClient('192.168.10.2', port=50000)
     client.connect()
     Thread(target=run_sync_client).start()
 

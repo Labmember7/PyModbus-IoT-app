@@ -34,14 +34,15 @@ def update_temperature():
 
 
 def run_slave():
-    print("Modbus server started...")
+    print("Modbus server/slave started...")
     # Tcp:
     StartTcpServer(context, address=("localhost", 12345))
 
 
 def update_slave_values(new_vals=[0,0,0]):
+    #Updating holding registers
     store.setValues(3, 0, new_vals)
-    print(store.getValues(3, 0, len(new_vals)))
+    print("New holding registers are : ", store.getValues(3, 0, 9))
         
 if __name__ == '__main__':
     #Creating the pymodbus server
@@ -51,9 +52,17 @@ if __name__ == '__main__':
         hr=ModbusSequentialDataBlock(0, [7]*10),
         ir=ModbusSequentialDataBlock(0, [8]*10))
 
+    '''
+    di : Discrete Input
+    co : Coils
+    hr : Holding Registers
+    ir : Internal registers
+    '''
+
     context = ModbusServerContext(slaves=store, single=True)
     t1 = Thread(target=run_slave)
     t1.start()
     t1.join(2)
+    time.sleep(4)
     #Running the flask app
     app.run()
