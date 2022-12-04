@@ -1,8 +1,19 @@
-# Developing a Single Page App with Flask and Vue.js
+<h1 align="center"> Iot App using modbus </h1> 
 
-### Want to learn how to build this?
+This is a project that simulates an Iot system. It consists of an air conditioner, three seperate heat sensors and a Modbus server (equivalent to Modbus Card)
 
-Check out the [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
+<img src="https://user-images.githubusercontent.com/60778237/205506997-04f1a1b4-e267-43eb-9d0a-354a1d31b5b5.png" width="200" />
+
+<div align="center"> 
+<img src="https://user-images.githubusercontent.com/60778237/205505008-7539241d-b792-4d9f-baf2-6eda317210f8.png" width="500" />
+</div>
+
+<div align="center"> 
+<img src="https://user-images.githubusercontent.com/60778237/205507784-10a68935-9e96-4bfb-a386-9e1f64a16243.png" width="500" />
+</div>
+
+
+![image]()
 
 ## Want to use this project?
 
