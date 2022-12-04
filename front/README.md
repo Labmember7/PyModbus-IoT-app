@@ -1,4 +1,4 @@
-# client
+# FRONT App
 
 ## Project setup
 ```
