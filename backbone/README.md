@@ -1,4 +1,0 @@
-# Install Flask
-
-```
-activate enviremont
